@@ -152,6 +152,7 @@ PLATFORMS
 
 DEPENDENCIES
   authentication!
+  devise
   sqlite3
 
 BUNDLED WITH
