@@ -5,6 +5,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gemspec
 
 group :development do
+  gem 'devise'
+  gem 'puma'
   gem 'sqlite3'
 end
 
