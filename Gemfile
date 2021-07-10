@@ -6,8 +6,8 @@ gemspec
 
 group :development do
   gem 'sqlite3'
+  gem 'puma'
 end
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
-gem 'devise'

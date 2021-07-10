@@ -18,7 +18,7 @@ $ bundle
 
 Or install it yourself as:
 ```bash
-$ gem install authentication
+$ rails g devise:controllers authentication
 ```
 
 ## Contributing
