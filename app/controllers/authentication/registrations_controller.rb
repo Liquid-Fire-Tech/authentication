@@ -16,7 +16,7 @@ class Authentication::RegistrationsController < Devise::RegistrationsController
     # raise 'Phone number is not invalid' if params[:phone_number].present? && (params[:phone_number].size < 10)
     raise 'Email is invalid' unless (URI::MailTo::EMAIL_REGEXP).match? params[:email]
 
-    user = Authentication::User.new(
+    user = User.new(
       name: params[:name],
       # phone_number: (params[:phone_number] if params[:phone_number].present?),
       email: params[:email],

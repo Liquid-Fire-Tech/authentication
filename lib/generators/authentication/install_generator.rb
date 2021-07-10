@@ -12,7 +12,7 @@ module Authentication
 
       # class_option :routes, desc: "Generate routes", type: :boolean, default: true
 
-      source_root File.expand_path("../../../db/migrate/", __FILE__)
+      source_root File.expand_path("../templates/", __FILE__)
 
       def add_authentication_routes
         authentication_route  = "mount Authentication::Engine, at: '/auth'"
@@ -20,7 +20,7 @@ module Authentication
       end
 
       def copy_migrations
-        migrations = Dir[Authentication::Engine.root.join("db/migrate/*.rb")]
+        migrations = Dir[Authentication::Engine.root.join("lib/generators/templates/migrations/*.rb")]
         migrations.each_with_index do |migration, i|
       
           seconds = (DateTime.now.strftime("%S").to_i + i).to_s
@@ -30,9 +30,16 @@ module Authentication
           if Rails.root.join("db/migrate/*#{name}").exist?
             puts "Migration #{name} has already been copied to your app"
           else
-            copy_file migration, "db/migrate/#{timestamp}_authenticaiton_#{name}"
+            copy_file migration, "db/migrate/#{timestamp}_authentication_create_#{name}"
           end
         end
+
+        # for lack of a better solution
+        models = Dir[Authentication::Engine.root.join("lib/generators/templates/models/*.rb")]
+        models.each do |model|
+          copy_file model, "app/models/#{model.split("/").last}"
+        end
+
       end
     end
   end
