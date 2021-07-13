@@ -61,6 +61,12 @@ module Authentication
           RUBY2
         end
 
+        def snippet_routes_root_path(model, mount_at)
+          "namespace :api do\n"\
+          "\tscope module: :v1, constraints: ApiVersion.new('v1', true) do\n"\
+          "\t\tmount_devise_token_auth_for '#{model}', at: '#{mount_at}'\n"\
+          "\tend\nend"
+        end
       end
     end
   end

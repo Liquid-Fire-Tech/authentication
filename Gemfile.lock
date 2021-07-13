@@ -3,8 +3,9 @@ PATH
   specs:
     authentication (0.1.0)
       devise (~> 4.8.0)
-      devise_token_auth
+      devise_token_auth (~> 1.1.5)
       rails (~> 6.1.4)
+      rolify (~> 6.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -137,6 +138,7 @@ GEM
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
+    rolify (6.0.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.1)
