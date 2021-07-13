@@ -21,6 +21,16 @@ Or install it yourself as:
 $ gem install authentication
 ```
 
+To install
+```
+$ rails g authentication:install
+```
+
+For help
+```
+$ rails g authentication: --help
+```
+
 ## Contributing
 Contribution directions go here.
 
