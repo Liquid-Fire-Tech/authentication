@@ -28,7 +28,7 @@ $ rails g authentication:install
 
 For help
 ```
-$ rails g authentication: --help
+$ rails g authentication:install --help
 ```
 
 ## Contributing
