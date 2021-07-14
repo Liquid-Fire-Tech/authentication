@@ -21,6 +21,8 @@ Gem::Specification.new do |spec|
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
   spec.add_dependency 'devise', '~> 4.8.0'
-  spec.add_dependency 'devise_token_auth'
+  spec.add_dependency 'devise_token_auth', '~>1.1.5'
+  spec.add_dependency 'pundit', '~>2.1.0'
   spec.add_dependency 'rails', '~> 6.1.4'
+  spec.add_dependency 'rolify', '~>6.0.0'
 end
