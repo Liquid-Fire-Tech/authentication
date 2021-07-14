@@ -50,15 +50,33 @@ module Authentication
           RUBY1
         end
 
-        def snippet_home_ctlr_header
+        def snippet_application_ctlr_header
           <<-'RUBY2'
           protect_from_forgery with: :null_session
+          include Pundit
 
           protected
           def authenticate_user!
             redirect_to root_path, notice: 'Please sign in' unless user_signed_in?
           end
           RUBY2
+        end
+
+        def snippet_base_ctrl_header
+          <<-'RUBY3'
+          include DeviseTokenAuth::Concerns::SetUserByToken
+          include Pundit
+
+          before_action :authenticate_user!
+
+          rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+          private
+
+          def user_not_authorized
+            render json: { success: false, errors: [ "You are not authorized to perform this action" ] }, status: :unauthorized
+          end
+          RUBY3
         end
 
         def snippet_routes_root_path(model, mount_at)
