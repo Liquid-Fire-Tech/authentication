@@ -18,7 +18,7 @@ module Authentication
       class_option :roles, type: 'array', default: ['admin'], desc: 'Roles to create by default'
 
       def check_requirements
-        gem_find_or_fail(%w[devise devise_token_auth])
+        gem_find_or_fail(%w[devise devise_token_auth pundit rolify])
       end
 
       def setup_devise_and_devise_token_auth
