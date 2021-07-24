@@ -13,7 +13,8 @@ module Authentication
       class_option :skip_rolify, type: :boolean, default: false, desc: 'Skip rolify setup'
       class_option :skip_pundit, type: :boolean, default: false, desc: 'Skip pundit setup and '
 
-      class_option :authentication_mount, type: :string, default: 'auth', desc: 'Define the model for user authentication'
+      class_option :authentication_mount, type: :string, default: 'auth',
+                                          desc: 'Define the model for user authentication'
       class_option :model, type: :string, default: 'User', desc: 'Define the model for user authentication'
       class_option :roles, type: 'array', default: ['admin'], desc: 'Roles to create by default'
 
@@ -32,7 +33,7 @@ module Authentication
             snippet_for_user_phone_number
           end
 
-          system "rails db:migrate"
+          system 'rails db:migrate'
 
           # TODO: Enable omniauth in user model
         end
@@ -42,16 +43,17 @@ module Authentication
         unless options.skip_base_controller
           copy_file 'lib/api_version.rb', 'app/lib/api_version.rb'
 
-          generate 'controller', 'api/v1/base --skip-template-engine --no-helper --no-assets --no-controller-specs --no-view-specs'
-          gsub_file "app/controllers/api/v1/base_controller.rb", /ApplicationController/, 'ActionController::API'
-          
+          generate 'controller',
+                   'api/v1/base --skip-template-engine --no-helper --no-assets --no-controller-specs --no-view-specs'
+          gsub_file 'app/controllers/api/v1/base_controller.rb', /ApplicationController/, 'ActionController::API'
+
           inject_into_file 'app/controllers/api/v1/base_controller.rb',
-                          after: "ActionController::API\n" do
+                           after: "ActionController::API\n" do
             snippet_base_ctrl_header
           end
 
           inject_into_file 'app/controllers/application_controller.rb',
-                          after: "::SetUserByToken\n" do
+                           after: "::SetUserByToken\n" do
             snippet_application_ctlr_header
           end
         end
@@ -60,17 +62,28 @@ module Authentication
       def setup_rolify
         unless options.skip_rolify
           system "rails g rolify Role #{options.model}"
-          system "rails db:migrate"
+          system 'rails db:migrate'
 
+          empty_directory 'db/seeds'
+
+          roles_create_query = ''
+          options.roles.each do |role|
+            roles_create_query += "Role.create(name: '#{role.underscore}')\n"
+          end
+          template 'roles.rb', 'db/seeds/roles.rb'
+          inject_into_file 'db/seeds.rb' do
+            "load 'db/seeds/roles.rb'"
+          end
+          inject_into_file 'db/seeds/roles.rb' do
+            roles_create_query
+          end
+
+          system 'rails db:seed'
           # options.roles.each do |role|
           #   generate 'controller', "api/v1/#{role.underscore}/base --skip-template-engine --no-helper --no-assets --no-controller-specs --no-view-specs"
           #   gsub_file "app/controllers/api/v1/#{role.underscore}/base_controller.rb", /ApplicationController/, 'Api::V1::BaseController'
           # end
         end
-        # TODO: Create default roles
-        # options.roles.each do |role|
-        #   Role.create(name: role.underscore)
-        # end
       end
 
       def setup_pundit
@@ -79,7 +92,8 @@ module Authentication
 
       def setup_devise_routes
         unless options.skip_devise
-          gsub_file 'config/routes.rb', /mount_devise_token_auth_for 'User', at: 'auth'/, "devise_for :#{options.model.underscore.pluralize}"
+          gsub_file 'config/routes.rb', /mount_devise_token_auth_for 'User', at: 'auth'/,
+                    "devise_for :#{options.model.underscore.pluralize}"
           route snippet_routes_root_path(options.model, options.authentication_mount)
         end
       end
