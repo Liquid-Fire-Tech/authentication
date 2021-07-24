@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    authentication (0.1.0)
+    authentication (0.1.1)
       devise (~> 4.8.0)
       devise_token_auth (~> 1.1.5)
       pundit (~> 2.1.0)
