@@ -64,15 +64,26 @@ module Authentication
           system "rails g rolify Role #{options.model}"
           system 'rails db:migrate'
 
+          empty_directory 'db/seeds'
+
+          roles_create_query = ''
+          options.roles.each do |role|
+            roles_create_query += "Role.create(name: '#{role.underscore}')\n"
+          end
+          template 'roles.rb', 'db/seeds/roles.rb'
+          inject_into_file 'db/seeds.rb' do
+            "load 'db/seeds/roles.rb'"
+          end
+          inject_into_file 'db/seeds/roles.rb' do
+            roles_create_query
+          end
+
+          system 'rails db:seed'
           # options.roles.each do |role|
           #   generate 'controller', "api/v1/#{role.underscore}/base --skip-template-engine --no-helper --no-assets --no-controller-specs --no-view-specs"
           #   gsub_file "app/controllers/api/v1/#{role.underscore}/base_controller.rb", /ApplicationController/, 'Api::V1::BaseController'
           # end
         end
-        # TODO: Create default roles
-        # options.roles.each do |role|
-        #   Role.create(name: role.underscore)
-        # end
       end
 
       def setup_pundit
