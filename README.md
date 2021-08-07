@@ -22,7 +22,7 @@ Create a new rails app and add the gem in your `Gemfile`. You will required to r
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'authentication', git: 'https://github.com/Liquid-Fire-Tech/authentication.git', tag: '0.1.1'
+gem 'authentication', git: 'https://github.com/Liquid-Fire-Tech/authentication.git', tag: '0.1.2'
 ```
 
 And then execute:
